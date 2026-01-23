@@ -22,6 +22,9 @@ public class TakingTurnsQueue
     {
         var person = new Person(name, turns);
         _people.Enqueue(person);
+
+        // TEMP DEBUG - remove after testing
+        Console.WriteLine($"After adding {name}: {this.ToString()}");
     }
 
     /// <summary>
@@ -37,17 +40,23 @@ public class TakingTurnsQueue
         {
             throw new InvalidOperationException("No one in the queue.");
         }
-        else
-        {
-            Person person = _people.Dequeue();
-            if (person.Turns > 1)
-            {
-                person.Turns -= 1;
-                _people.Enqueue(person);
-            }
 
-            return person;
+        Person person = _people.Dequeue();
+
+        // Always use one turn (decrement)
+        if (person.Turns > 0)
+        {
+            person.Turns -= 1;
         }
+
+        // Re-queue if they still have turns left
+        if (person.Turns != 0)   // <= 0 means infinite
+        {
+            _people.Enqueue(person);
+        }
+
+        // Return the person who just took their turn
+        return person;
     }
 
     public override string ToString()

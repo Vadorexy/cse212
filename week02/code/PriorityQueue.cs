@@ -9,30 +9,31 @@
     /// </summary>
     /// <param name="value">The value</param>
     /// <param name="priority">The priority</param>
-    public void Enqueue(string value, int priority)
+    public void Enqueue(int value, int priority)
     {
         var newNode = new PriorityItem(value, priority);
         _queue.Add(newNode);
     }
 
-    public string Dequeue()
+    public int Dequeue()
     {
         if (_queue.Count == 0) // Verify the queue is not empty
         {
-            throw new InvalidOperationException("The queue is empty.");
+            throw new InvalidOperationException("Queue is empty.");
         }
 
         // Find the index of the item with the highest priority to remove
-        var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
+        int highPriorityIndex = 0;
+        for (int index = 1; index < _queue.Count; index++)
         {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
                 highPriorityIndex = index;
         }
 
         // Remove and return the item with the highest priority
-        var value = _queue[highPriorityIndex].Value;
-        return value;
+        int value = _queue[highPriorityIndex].Value;        // int
+        _queue.RemoveAt(highPriorityIndex);
+        return value;                                       // int return
     }
 
     // DO NOT MODIFY THE CODE IN THIS METHOD
@@ -45,10 +46,10 @@
 
 internal class PriorityItem
 {
-    internal string Value { get; set; }
+    internal int Value { get; set; }
     internal int Priority { get; set; }
 
-    internal PriorityItem(string value, int priority)
+    internal PriorityItem(int value, int priority)
     {
         Value = value;
         Priority = priority;
